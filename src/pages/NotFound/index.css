@@ -1,0 +1,58 @@
+.not-found-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px;
+  text-align: center;
+}
+
+.custom-result .ant-result-title {
+  font-size: 72px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  letter-spacing: -2px;
+}
+
+.custom-result .ant-result-subtitle {
+  font-size: 20px;
+  color: inherit;
+  opacity: 0.75;
+}
+
+/* 装饰线动画 */
+.decorative-line {
+  width: 120px;
+  height: 4px;
+  margin-top: 48px;
+  border-radius: 2px;
+  animation: line-grow 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes line-grow {
+  0% {
+    width: 0;
+    opacity: 0;
+  }
+
+  100% {
+    width: 120px;
+    opacity: 1;
+  }
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .custom-result .ant-result-title {
+    font-size: 56px;
+  }
+
+  .custom-result .ant-result-subtitle {
+    font-size: 18px;
+  }
+
+  .ant-result-extra {
+    width: 100%;
+  }
+}
