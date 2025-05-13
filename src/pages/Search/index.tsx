@@ -1,0 +1,55 @@
+const SearchPage = () => {
+  return (
+    <div>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+      <ul>s</ul>
+    </div>
+  )
+}
+
+export default SearchPage

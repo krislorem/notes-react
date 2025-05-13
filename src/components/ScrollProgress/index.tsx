@@ -4,17 +4,20 @@ import './index.css';
 const ScrollProgress = () => {
   const [scrollPercent, setScrollPercent] = useState(0);
 
-  const handleScroll = () => {
-    const scrollTop = document.documentElement.scrollTop;
-    const windowHeight = document.documentElement.clientHeight;
-    const docHeight = document.documentElement.scrollHeight;
+  const handleScroll = (e: Event) => {
+    const scrollTop = (e.target as HTMLElement).scrollTop;
+    const windowHeight = (e.target as HTMLElement).clientHeight;
+    const docHeight = (e.target as HTMLElement).scrollHeight;
     const progress = (scrollTop / (docHeight - windowHeight)) * 100;
     setScrollPercent(progress);
   };
 
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const scrollContainer = document.querySelector('.ant-layout-content');
+    if (!scrollContainer) return;
+
+    scrollContainer.addEventListener('scroll', handleScroll);
+    return () => scrollContainer.removeEventListener('scroll', handleScroll);
   }, []);
 
   return <Progress className="scroll-progress" percent={scrollPercent} showInfo={false}

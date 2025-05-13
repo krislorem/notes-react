@@ -51,6 +51,18 @@ html {
 html.dark {
   background-color: #000;
 
+  .app-logo {
+    color: #fff;
+  }
+
+  .ant-layout-sider-trigger {
+    background: #111 !important;
+  }
+
+  .ant-menu-item.ant-menu-item-selected {
+    color: #fff !important;
+  }
+
   .vditor--dark {
     .vditor-reset {
       color: #fff;

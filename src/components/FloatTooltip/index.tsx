@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import SwitchDarkMode from '@/components/SwitchDarkModeButton';
-import { UpOutlined, ArrowUpOutlined, FullscreenOutlined, FullscreenExitOutlined } from '@ant-design/icons'
+import { UpOutlined, ArrowUpOutlined, ArrowDownOutlined, FullscreenOutlined, FullscreenExitOutlined } from '@ant-design/icons'
 import { Flex, FloatButton } from 'antd';
+import { useModeAnimation } from '@/hooks/useThemeToggle';
+import { useThemeStore } from '@/stores/themeStore';
 import './index.css'
 const BOX_SIZE = 100;
 const BUTTON_SIZE = 40;
@@ -22,22 +24,29 @@ const insetInlineEnd: React.CSSProperties['insetInlineEnd'] = (BOX_SIZE - BUTTON
 const bottom: React.CSSProperties['bottom'] = BOX_SIZE - BUTTON_SIZE / 2
 
 const FloatToolButton = () => {
-  const [isDarkMode, setIsDarkMode] = useState(
-    typeof window !== 'undefined' ? localStorage.getItem('theme') === 'dark' : false
-  )
+  const theme = useThemeStore(state => state.theme);
+  const { toggleSwitchTheme, isDarkMode } = useModeAnimation({
+    isDarkMode: theme === 'dark',
+    onDarkModeChange: (isDark) => useThemeStore.setState({ theme: isDark ? 'dark' : 'light' })
+  });
 
-  const handleDarkModeChange = (isDark: boolean) => {
-    setIsDarkMode(isDark)
-  }
   const style: React.CSSProperties = {
     position: 'absolute',
     insetInlineEnd: insetInlineEnd,
     bottom: bottom,
   };
+  const scrollToBottom = () => {
+    const el = document.getElementById('main-content') as HTMLElement;
+    el.scrollTo({
+      top: el.scrollHeight - el.clientHeight,
+      behavior: 'smooth'
+    })
+  }
   const scrollToTop = () => {
-    window.scrollTo({
+    const el = document.getElementById('main-content') as HTMLElement;
+    el.scrollTo({
       top: 0,
-      behavior: 'smooth',
+      behavior: 'smooth'
     })
   }
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
@@ -64,16 +73,16 @@ const FloatToolButton = () => {
             placement="top"
             style={style}
             icon={<UpOutlined key="up" />}
-            tooltip="工具"
+            tooltip={{ title: "工具", placement: "left" }}
           >
-            <FloatButton icon={<ArrowUpOutlined />} tooltip={"回到顶部"} onClick={scrollToTop} />
-            {!isFullscreen ? <FloatButton icon={<FullscreenOutlined />} tooltip={"全屏"} onClick={fullscreen} /> : <FloatButton icon={<FullscreenExitOutlined />} tooltip={"退出全屏"} onClick={exitfullscreen} />}
+            <FloatButton icon={<ArrowUpOutlined />} tooltip={{ title: "返回顶部", placement: "left" }} onClick={scrollToTop} />
+            <FloatButton icon={<ArrowDownOutlined />} tooltip={{ title: "滚到底部", placement: "left" }} onClick={scrollToBottom} />
+            {!isFullscreen ? <FloatButton icon={<FullscreenOutlined />} tooltip={{ title: "全屏", placement: "left" }} onClick={fullscreen} /> : <FloatButton icon={<FullscreenExitOutlined />} tooltip={"退出全屏"} onClick={exitfullscreen} />}
             <SwitchDarkMode
               duration={1000}
               styleId="circle-animation"
-              className="!w-10 !h-10 !text-xl"
               isDarkMode={isDarkMode}
-              onDarkModeChange={handleDarkModeChange}
+              onDarkModeChange={toggleSwitchTheme}
             />
           </FloatButton.Group>
         </div>

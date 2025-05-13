@@ -107,11 +107,8 @@ export const useModeAnimation = (props?: ReactThemeSwitchAnimationProps): ReactT
     if (existingStyle) {
       existingStyle.remove()
     }
-
-    const { top, left, width, height } = ref.current.getBoundingClientRect()
-    const x = left + width / 2
-    const y = top + height / 2
-
+    const x = window.innerWidth - 50
+    const y = window.innerHeight - 150
     // Calculate the distance to each corner of the viewport
     const topLeft = Math.hypot(x, y)
     const topRight = Math.hypot(window.innerWidth - x, y)

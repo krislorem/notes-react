@@ -1,0 +1,82 @@
+/* 侧边栏主容器 */
+.ant-layout-sider {
+  background: var(--ant-color-bg-container) !important;
+  border-right: 1px solid var(--ant-color-border);
+}
+
+.ant-layout-sider-trigger {
+  background: #e7e7e7 !important;
+}
+
+/* 导航按钮容器 */
+.logo {
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid var(--ant-color-border);
+  margin-bottom: 16px;
+}
+
+.ant-menu-item {
+  padding-inline: 15px !important;
+  margin: 4px 12px !important;
+  border-radius: 8px !important;
+  height: 48px !important;
+}
+
+.ant-menu-item.ant-menu-item-selected {
+  color: #000 !important;
+}
+
+/* 导航按钮样式 */
+.logo .ant-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.logo .ant-btn:hover {
+  background: var(--ant-color-primary-hover);
+  color: var(--ant-color-primary);
+}
+
+/* 应用logo样式 */
+.app-logo {
+  font-family: sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-shadow:
+    2px 2px 0 var(--ant-color-primary),
+    4px 4px 0 var(--ant-color-border);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  margin: 10px 10px 1px 20px;
+}
+
+/* 主菜单样式 */
+.ant-menu {
+  background: transparent !important;
+  border-inline-end: 0 !important;
+}
+
+.ant-menu-item:hover {
+  background: var(--ant-color-primary-hover) !important;
+}
+
+.ant-menu-item-selected {
+  background: var(--ant-color-primary) !important;
+  color: #fff !important;
+}
+
+/* 内容区域 */
+.ant-layout-content {
+  height: 100vh;
+  overflow-y: scroll;
+  background: var(--ant-color-bg-container);
+  padding: 24px !important;
+}
+
+/* 暗色主题适配 */
+[data-theme='dark'] .logo .ant-btn {
+  border-color: var(--ant-color-border);
+}

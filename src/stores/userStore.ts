@@ -8,6 +8,7 @@ interface UserState {
     user_name: string;
     nick_name: string;
     avatar: string;
+    email: string;
     info: string;
   };
   logout: () => void;
@@ -22,6 +23,7 @@ export const useUserStore = create<UserState>()(
         user_name: '',
         nick_name: '',
         avatar: '',
+        email: '',
         info: '',
       },
       setUser: (user) => set((state) => {
@@ -33,6 +35,7 @@ export const useUserStore = create<UserState>()(
           user_name: '',
           nick_name: '',
           avatar: '',
+          email: '',
           info: '',
         }
       }),

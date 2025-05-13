@@ -1,7 +1,7 @@
 import { Button, Result, theme } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import type { FC } from 'react';
-import './NotFoundPage.css';
+import './index.css';
 
 const NotFound: FC = () => {
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ const NotFound: FC = () => {
         }
         className="custom-result"
       />
-      
+
       <div className="decorative-line" style={{ background: token.colorPrimary }} />
     </div>
   );
