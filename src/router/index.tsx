@@ -4,11 +4,6 @@ import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 const Loading = lazy(() => import('@/components/Loading'))
 const Home = lazy(() => import('@/pages/Home'))
 const ExploreLayout = lazy(() => import('@/pages/Explore/Layout'))
-const ExploreBook = lazy(() => import('@/pages/Explore/Book'))
-const ExploreBookDetail = lazy(() => import('@/pages/Explore/BookDetail'))
-const ExploreNote = lazy(() => import('@/pages/Explore/Note'))
-const ExploreNoteDetail = lazy(() => import('@/pages/Explore/NoteDetail'))
-const ExploreUser = lazy(() => import('@/pages/Explore/User'))
 const UserLayout = lazy(() => import('@/pages/User/Layout'))
 const UserInfo = lazy(() => import('@/pages/User/Info'))
 const UserEdit = lazy(() => import('@/pages/User/Edit'))
@@ -19,8 +14,10 @@ const UserNoteDetail = lazy(() => import('@/pages/User/NoteDetail'))
 const UserBookEdit = lazy(() => import('@/pages/User/BookEdit'))
 const UserNoteEdit = lazy(() => import('@/pages/User/NoteEdit'))
 const UserBookList = lazy(() => import('@/pages/User/BookList'))
+const UserMarkList = lazy(() => import('@/pages/User/MarkList'))
 const UserTemp = lazy(() => import('@/pages/User/Temp'))
 const SearchPage = lazy(() => import('@/pages/Search'))
+const SearchPageBooks = lazy(() => import('@/pages/Search/Books'))
 const AIPage = lazy(() => import('@/pages/AI'))
 const Login = lazy(() => import('@/pages/Login'))
 const NotFound = lazy(() => import('@/pages/NotFound'))
@@ -50,20 +47,16 @@ const AppRoutes = () => {
       <Routes>
         <Route path="/" element={<Home />}>
           <Route index element={<Navigate to="explore" replace />} />
-          <Route path="explore/" element={<ExploreLayout />}>
-            <Route path="book" element={<ExploreBook />} />
-            <Route path="book/:bookId" element={<ExploreBookDetail />} />
-            <Route path="note" element={<ExploreNote />} />
-            <Route path="note/:noteId" element={<ExploreNoteDetail />} />
-            <Route path="user/:userId" element={<ExploreUser />} />
-          </Route>
-          <Route path="search" element={<SearchPage />} />
-          <Route path="ai" element={<AIPage />} />
+          <Route path="explore/" element={<ExploreLayout />} />
+          <Route path="note-search" element={<SearchPage />} />
+          <Route path='book-search' element={<SearchPageBooks />} />
+          <Route path="ai/:noteId" element={<AIPage />} />
           <Route path="my/" element={<AuthRoute><UserLayout /></AuthRoute>}>
-            <Route index element={<UserInfo />} />
-            <Route path="edit" element={<UserEdit />} />
+            <Route index path='info/:userId' element={<UserInfo />} />
+            <Route path="edit/:userId" element={<UserEdit />} />
             <Route path="follow" element={<UserFollow />} />
             <Route path="fan" element={<UserFan />} />
+            <Route path="mark" element={<UserMarkList />} />
             <Route path="temp" element={<UserTemp />} />
             <Route path="note/edit/:noteId" element={<UserNoteEdit />} />
             <Route path="book/edit/:bookId" element={<UserBookEdit />} />

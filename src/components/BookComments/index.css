@@ -1,0 +1,16 @@
+.comment-modal {
+  &::-webkit-scrollbar {
+    display: none;
+    width: 0;
+  }
+
+  .comment-input-container {
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+    z-index: 10;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 5, 0.1);
+  }
+}

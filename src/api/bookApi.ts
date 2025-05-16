@@ -43,21 +43,21 @@ const getMyBookNotes = async (book_id: number, pageNum: number, pageSize: number
 // 获取我的某个笔记的信息
 const getMyNote = async (note_id: number) => {
   const response = await authAxios.post("/api/book/my/note", { note_id: note_id });
-  return response.data;
+  return { data: response.data };
 };
 // 获取某个笔记本的所有一级评论
-const getBookComments = async (book_id: number, pageNum: number, pageSize: number) => {
-  const response = await authAxios.post("/api/book/comment", { book_id: book_id, pageNum: pageNum, pageSize: pageSize });
+const getBookComments = async (book_id: number, user_id: number, pageNum: number, pageSize: number) => {
+  const response = await authAxios.post("/api/book/comment", { book_id: book_id, user_id: user_id, pageNum: pageNum, pageSize: pageSize });
   return response.data;
 };
 // 获取某个笔记的所有一级评论
-const getNoteComments = async (note_id: number, pageNum: number, pageSize: number) => {
-  const response = await authAxios.post("/api/book/note/comment", { note_id: note_id, pageNum: pageNum, pageSize: pageSize });
+const getNoteComments = async (note_id: number, user_id: number, pageNum: number, pageSize: number) => {
+  const response = await authAxios.post("/api/book/note/comment", { note_id: note_id, user_id: user_id, pageNum: pageNum, pageSize: pageSize });
   return response.data;
 };
 // 获取某个评论的所有回复
-const getCommentReplies = async (comment_id: number, pageNum: number, pageSize: number) => {
-  const response = await authAxios.post("/api/book/comment/reply", { comment_id: comment_id, pageNum: pageNum, pageSize: pageSize });
+const getCommentReplies = async (comment_id: number, user_id: number, pageNum: number, pageSize: number) => {
+  const response = await authAxios.post("/api/book/comment/reply", { comment_id: comment_id, user_id: user_id, pageNum: pageNum, pageSize: pageSize });
   return response.data;
 };
 // 获取某个笔记本的点赞数
@@ -171,8 +171,13 @@ const createNoteComment = async (content: string, user_id: number, object_id: nu
   return response.data;
 }
 // 新建一个评论下的回复
-const createCommentReply = async (content: string, comment_id: number, user_id: number, object_id: number) => {
-  const response = await authAxios.post("/api/book/reply/create/comment", { content: content, comment_id: comment_id, user_id: user_id, object_id: object_id });
+const createCommentReply = async (content: string, object_id: number, user_id: number) => {
+  const response = await authAxios.post("/api/book/reply/create/comment", { content: content, object_id: object_id, user_id: user_id });
+  return response.data;
+}
+// 新建一个回复下的回复
+const createReplyReply = async (content: string, object_id: number, user_id: number, comment_id: number) => {
+  const response = await authAxios.post("/api/book/reply/create/reply", { content: content, object_id: object_id, user_id: user_id, comment_id: comment_id });
   return response.data;
 }
 // 查询是否是我的评论
@@ -322,6 +327,7 @@ export {
   createBookComment,
   createNoteComment,
   createCommentReply,
+  createReplyReply,
   getIsMyComment,
   getIsMyReply,
   deleteMyComment,

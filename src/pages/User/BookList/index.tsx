@@ -1,12 +1,14 @@
-import { getMyBooks, getBookCommentsCount, getBookNotesCount, getBookLikes, getBookMarks } from "@/api/bookApi"
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { getMyBooks, getBookCommentsCount, getBookNotesCount, getBookLikes, getBookMarks, deleteBook } from "@/api/bookApi"
 import { useEffect, useState } from "react"
 import { useUserStore } from "@/stores/userStore"
-import { Card, List, Pagination, Button, Switch, Row, Col } from "antd"
+import { Card, List, Pagination, Button, Switch, Row, Col, message } from "antd"
 import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons"
 import { useNavigate } from "react-router-dom"
 
 const UserBookList = () => {
   const [books, setBooks] = useState<any[]>([]);
+  const [total, setTotal] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [isGridLayout, setIsGridLayout] = useState(true);
   const user = useUserStore(state => state.user);
@@ -15,9 +17,9 @@ const UserBookList = () => {
   useEffect(() => {
     const loadData = async () => {
       if (user?.user_id) {
+        setBooks([]);
         const { data } = await getMyBooks(user.user_id, currentPage, 20);
-        console.log('data', data);
-        const booksWithStats = await Promise.all(data.map(async (book: any) => ({
+        const booksWithStats = await Promise.all(data.data.map(async (book: any) => ({
           ...book,
           comments: (await getBookCommentsCount(book.book_id)).data,
           likes: (await getBookLikes(book.book_id)).data,
@@ -25,6 +27,7 @@ const UserBookList = () => {
           notes: (await getBookNotesCount(book.book_id)).data
         })));
         setBooks(booksWithStats);
+        setTotal(data.total);
       }
     };
     loadData();
@@ -42,28 +45,40 @@ const UserBookList = () => {
         <Pagination
           current={currentPage}
           pageSize={20}
-          total={100}
+          total={total}
           onChange={page => setCurrentPage(page)}
         />
       </div>
 
       {isGridLayout ? (
-        <Row gutter={[16, 16]}>
+        <Row>
           {books.map(book => (
-            <Col 
+            <Col
               key={book.book_id}
               xs={24}
               sm={12}
               md={8}
               lg={6}
-              xl={4}
+              xl={5}
+              style={{ marginBottom: 10, marginRight: 10 }}
             >
               <Card
                 cover={<img alt="封面" src={book.cover} style={{ height: 200, objectFit: 'cover' }} />}
                 actions={[
                   <EyeOutlined key="view" onClick={() => navigate(`/my/book/detail/${book.book_id}`)} />,
                   <EditOutlined key="edit" onClick={() => navigate(`/my/book/edit/${book.book_id}`)} />,
-                  <DeleteOutlined key="delete" />
+                  <DeleteOutlined key="delete" onClick={async () => {
+                    try {
+                      await deleteBook(book.book_id);
+                      const { data } = await getMyBooks(Number(book.book_id), currentPage, 20);
+                      setBooks(data.data || []);
+                      setTotal(data.total);
+                      message.success('删除成功');
+                    } catch (error) {
+                      console.error('删除失败:', error);
+                      message.error('删除失败');
+                    }
+                  }} />
                 ]}
               >
                 <Card.Meta
@@ -92,7 +107,18 @@ const UserBookList = () => {
               actions={[
                 <Button key="view" icon={<EyeOutlined />} onClick={() => navigate(`/my/book/detail/${book.book_id}`)} />,
                 <Button key="edit" icon={<EditOutlined />} onClick={() => navigate(`/my/book/edit/${book.book_id}`)} />,
-                <Button key="delete" danger icon={<DeleteOutlined />} />
+                <Button key="delete" icon={<DeleteOutlined />} onClick={async () => {
+                  try {
+                    await deleteBook(book.book_id);
+                    const { data } = await getMyBooks(Number(book.book_id), currentPage, 20);
+                    setBooks(data.data || []);
+                    setTotal(data.total);
+                    message.success('删除成功');
+                  } catch (error) {
+                    console.error('删除失败:', error);
+                    message.error('删除失败');
+                  }
+                }} />
               ]}
             >
               <List.Item.Meta

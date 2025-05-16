@@ -9,11 +9,20 @@
     }
   ],
   "compilerOptions": {
+    "target": "es2022",
+    "lib": [
+      "es2022",
+      "dom"
+    ],
     "baseUrl": ".",
     "paths": {
       "@/*": [
         "./src/*"
       ]
-    }
+    },
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
   },
 }

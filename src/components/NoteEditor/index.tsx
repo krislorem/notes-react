@@ -5,6 +5,7 @@ import "./index.css";
 import { useThemeStore } from "@/stores/themeStore";
 import { uploadFile } from "@/api/ossApi";
 
+
 const IREditor = forwardRef((_props, ref) => {
   const [vd, setVd] = useState<Vditor>();
   const theme = useThemeStore(state => state.theme);
@@ -12,6 +13,7 @@ const IREditor = forwardRef((_props, ref) => {
     getValue: () => vd?.getValue() ?? '',
     getHTML: () => vd?.getHTML() ?? '',
     getCount: () => vd!.getValue().length - 1 || 0,
+    setValue: (content: string) => vd?.setValue(content)
   }));
   useEffect(() => {
     const vditor = new Vditor("vditor", {
@@ -26,22 +28,34 @@ const IREditor = forwardRef((_props, ref) => {
         "type": "markdown"
       },
       upload: {
-        handler: async (files) => {
+        handler: async (files): Promise<string> => {
           const file = files[0];
           try {
-            const { url } = await uploadFile(file);
-            return url;
+            // 清理文件名
+            const originalName = file.name;
+            const [namePart, ...extParts] = originalName.split('.');
+            const extension = extParts.length > 0 ? extParts.pop() : '';
+            const cleanNamePart = namePart.replace(/[^\w]/g, '') || Date.now().toString();
+            const cleanFileName = extension ? `${cleanNamePart}.${extension}` : cleanNamePart;
+            // 创建新File对象
+            const cleanedFile = new File([file], cleanFileName, { type: file.type });
+            // 上传文件
+            const { data } = await uploadFile(cleanedFile);
+            console.log('Upload successful:', data.url);
+            const markdown = `![${cleanFileName}](${data.url})`;
+            vditor.insertValue(markdown);
+            return data.url;
           } catch (error) {
             console.error('Upload failed:', error);
-            return '';
+            return 'Upload failed';
           }
         }
       },
       toolbar: [
         'emoji', 'upload', '|', 'headings', 'bold', 'italic', 'strike', '|',
         'list', 'ordered-list', 'check', 'outdent', 'indent', '|',
-        'link', 'table', 'code', 'inline-code', '|', 'undo', 'redo'
-      ],
+        'link', 'table', 'code', 'inline-code', 'export', '|', 'undo', 'redo'
+      ]
     })
   }, []);
   useEffect(() => {

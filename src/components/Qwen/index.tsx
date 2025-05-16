@@ -5,21 +5,20 @@ import React, { useEffect, useState } from 'react';
 import type { GetProp } from 'antd';
 import { Button, Flex, Space, Spin, message as antdMessage } from 'antd';
 import MarkdownRender from '@/components/QwenItemRender';
+import { getMyNote } from '@/api/bookApi';
 import dayjs from 'dayjs';
 const client = new OpenAI({
   baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1',
   apiKey: import.meta.env.VITE_DASHSCOPE_API_KEY,
   dangerouslyAllowBrowser: true,
 });
-
-const Independent: React.FC = () => {
+type IndependentProps = {
+  noteID: string;
+}
+const Independent: React.FC<IndependentProps> = ({ noteID }) => {
   // 静态时间状态
-  const [staticTime, setStaticTime] = useState('');
+  const [hasSentInitialMessage, setHasSentInitialMessage] = useState(false);
 
-  // 组件挂载时初始化时间
-  useEffect(() => {
-    setStaticTime(dayjs().format('HH:mm:ss'));
-  }, []); // 空依赖数组确保只执行一次
   const [agent] = useXAgent({
     request: async (info, callbacks) => {
       const { messages, message } = info;
@@ -41,7 +40,7 @@ const Independent: React.FC = () => {
           // if chat context is needed, modify the array
           messages: [
             { role: 'system', content: 'hello' },
-            { role: 'user', content: message! }
+            { role: 'user', content: message! },
           ],
           // stream mode
           stream: true,
@@ -56,6 +55,7 @@ const Independent: React.FC = () => {
       }
     },
   });
+  // 初始化时间和发送问候语
 
   const {
     // use to send message
@@ -63,6 +63,25 @@ const Independent: React.FC = () => {
     // use to render messages
     messages,
   } = useXChat({ agent });
+  useEffect(() => {
+    const fetchData = async () => {
+      console.log(noteID)
+      if (noteID !== "0") {
+        try {
+          const noteResponse = await getMyNote(Number(noteID));
+          const noteData = noteResponse.data.data;
+          if (!hasSentInitialMessage) {
+            onRequest(`帮我翻译一下这份笔记\n\`\`\`markdown\n${noteData.content}\n\`\`\``);
+            setHasSentInitialMessage(true);
+          }
+        } catch (error) {
+          console.error('获取笔记数据失败:', error);
+        }
+      }
+    };
+
+    fetchData();
+  }, [onRequest, hasSentInitialMessage, noteID]);
 
   const items = messages.map(({ message, id }, index) => ({
     key: id,
@@ -88,7 +107,7 @@ const Independent: React.FC = () => {
     user: {
       placement: 'end',
       avatar: { icon: <UserOutlined />, style: { background: '#87d068' } },
-      header: `${staticTime} 我`,
+      header: `${dayjs().format('HH:mm:ss')}} 我`,
       messageRender: (content) => <MarkdownRender content={content} />,
     },
     assistant: {
@@ -104,7 +123,7 @@ const Independent: React.FC = () => {
         },
       },
       avatar: { icon: <AlibabaOutlined />, style: { background: '#5c6ac4' } },
-      header: `${staticTime} Assistant`,
+      header: `${dayjs().format('HH:mm:ss')} Assistant`,
       messageRender: (content) => <MarkdownRender content={content} />,
       loadingRender: () => (
         <Space>
@@ -127,3 +146,5 @@ const Independent: React.FC = () => {
 };
 
 export default Independent;
+
+

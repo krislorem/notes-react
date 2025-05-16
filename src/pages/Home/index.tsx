@@ -13,7 +13,8 @@ import {
   RobotOutlined,
   LogoutOutlined,
   LoginOutlined,
-  FileTextOutlined
+  FileTextOutlined,
+  HeartOutlined
 } from '@ant-design/icons';
 import { Outlet, useNavigate } from 'react-router-dom';
 
@@ -26,6 +27,7 @@ const Home = () => {
     { label: '搜索', key: 'search', icon: <SearchOutlined /> },
     { label: '新建', key: 'new', icon: <PlusOutlined /> },
     { label: '笔记本', key: 'book', icon: <FileTextOutlined /> },
+    { label: '收藏夹', key: 'mark', icon: <HeartOutlined /> },
     { label: 'AI', key: 'ai', icon: <RobotOutlined /> },
     { label: '回收站', key: 'temp', icon: <DeleteOutlined /> },
   ];
@@ -33,7 +35,7 @@ const Home = () => {
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider collapsible width={200}>
-        <div className="app-logo">NOTE</div>
+        <div className="app-logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>NOTE</div>
         <div className="logo" style={{ padding: 16 }}>
           <Button
             type="text"
@@ -57,14 +59,20 @@ const Home = () => {
           }}
           onSelect={({ key }) => {
             const routes = {
-              search: '/search',
+              search: '/note-search',
               new: '/my/book/edit/0',
               book: '/my/book/list',
-              ai: '/ai',
-              temp: '/my/temp'
+              ai: '/ai/0',
+              temp: '/my/temp',
+              mark: '/my/mark'
             };
-            const routeKey = key as keyof typeof routes;
-            navigate(routes[routeKey]);
+            // const routeKey = key as keyof typeof routes;
+            if (Object.hasOwn(routes, key)) {
+              const routeKey = key as keyof typeof routes;
+              navigate(routes[routeKey]);
+            } else {
+              console.error('无效的路由键:', key);
+            }
           }}
         />
 
@@ -104,7 +112,7 @@ const Home = () => {
                 exit();
                 navigate('/login', { replace: true });
               } else if (user.user_id) {
-                navigate('/my');
+                navigate('/my/info/' + user.user_id);
               }
             }}
           />

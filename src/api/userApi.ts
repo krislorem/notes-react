@@ -33,6 +33,16 @@ const getAllUsers = async (pageNum: number, pageSize: number) => {
   const response = await baseAxios.post("/api/user/list", { pageNum: pageNum, pageSize: pageSize });
   return response.data;
 }
+// 获取用户信息
+const getUserInfo = async (user_id: number) => {
+  const response = await authAxios.post("/api/user/info", { user_id: user_id });
+  return response.data;
+}
+// 修改用户信息
+const updateUserInfo = async (user_id: number, user_name: string, nick_name: string, info: string, avatar: string) => {
+  const response = await authAxios.post("/api/user/update", { user_id: user_id, user_name: user_name, nick_name: nick_name, info: info, avatar: avatar });
+  return response.data;
+}
 // 根据用户名查询用户
 const getUserByName = async (username: string) => {
   const response = await baseAxios.post("/api/user/name", { username: username });
@@ -89,12 +99,31 @@ const getReplyUser = async (reply_id: number) => {
   const response = await authAxios.post("/api/user/reply", { reply_id: reply_id });
   return response.data;
 }
+
+// 获取用户的笔记本数量
+const getUserNotebookNum = async (user_id: number) => {
+  const response = await authAxios.post("/api/user/notebookNum", { user_id: user_id });
+  return response.data;
+}
+// 获取用户的笔记数量
+const getUserNoteNum = async (user_id: number) => {
+  const response = await authAxios.post("/api/user/noteNum", { user_id: user_id });
+  return response.data;
+}
+// 获取用户的获赞数量
+const getUserLikeNum = async (user_id: number) => {
+  const response = await authAxios.post("/api/user/likeNum", { user_id: user_id });
+  return response.data;
+}
+
 export {
   login,
   register,
   exit,
   sendcode,
   getAllUsers,
+  getUserInfo,
+  updateUserInfo,
   getUserByName,
   followUser,
   unfollowUser,
@@ -104,5 +133,9 @@ export {
   getFollowers,
   getUserFavoriteNotebooks,
   getUserFavoriteNotes,
-  getUserHeat
+  getUserHeat,
+  getReplyUser,
+  getUserNotebookNum,
+  getUserNoteNum,
+  getUserLikeNum
 };

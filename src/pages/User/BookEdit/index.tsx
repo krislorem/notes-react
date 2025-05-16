@@ -1,6 +1,6 @@
 import { createBook, updateBook, getMyBook } from '@/api/bookApi'
 import { uploadFile } from '@/api/ossApi'
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Button, Form, Input, message, Upload, Checkbox } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
@@ -11,7 +11,9 @@ const UserBookEdit = () => {
   const [form] = Form.useForm();
   const { bookId } = useParams();
   const [coverImage, setCoverImage] = useState('');
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [cropper, setCropper] = useState<any>();
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log('bookId:', bookId);
@@ -48,7 +50,7 @@ const UserBookEdit = () => {
 
       try {
         const file = formData.get('file') as File;
-        const {data} = await uploadFile(file);
+        const { data } = await uploadFile(file);
         form.setFieldsValue({ cover: data.url });
         form.validateFields(['cover']);
         console.log('封面图片上传成功:', data.url);
@@ -60,6 +62,7 @@ const UserBookEdit = () => {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (values: any) => {
     try {
       if (bookId === '0') {
@@ -133,6 +136,15 @@ const UserBookEdit = () => {
           </Button>
         </Form.Item>
       </Form>
+      <Button onClick={() => {
+        if (bookId !== '0') {
+          if (bookId && bookId !== '0') {
+            navigate(`/my/note/edit/${bookId}`);
+          } else {
+            message.error('笔记本尚未保存，请先保存笔记本');
+          }
+        }
+      }}>新建笔记</Button>
     </div>
   );
 }
