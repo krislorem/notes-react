@@ -7,7 +7,20 @@ import { LikeOutlined, StarOutlined, CommentOutlined, EyeOutlined } from "@ant-d
 
 const SearchPageBooks = () => {
   const [form] = Form.useForm();
-  const [results, setResults] = useState([]);
+  type Book = {
+    book_id: number;
+    book_name: string;
+    tags: string[];
+    cover: string;
+    user_name: string;
+    user_id: number;
+    avatar: string;
+    like_count: number;
+    mark_count: number;
+    comment_count: number;
+    create_time: string;
+  };
+  const [results, setResults] = useState<Book[]>([]);
   const [loading, setLoading] = useState(false);
   const [isGridLayout, setIsGridLayout] = useState(true);
   const [pagination, setPagination] = useState({ current: 1, pageSize: 12, total: 0 });
@@ -116,7 +129,6 @@ const SearchPageBooks = () => {
                 title={book.book_name}
                 description={
                   <div>
-                    <div>{book.book_intro || '暂无介绍'}</div>
                     <div style={{ display: 'flex', alignItems: 'center', marginTop: 8 }}>
                       <img
                         alt="avatar"

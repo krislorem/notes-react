@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 import { Button, Form, Input, Select, Space, Switch, Pagination, Row, Col, Card, Tag, List, Empty } from 'antd';
 import { EyeOutlined, LikeOutlined, StarOutlined, CommentOutlined } from '@ant-design/icons';
@@ -6,7 +7,19 @@ import { useNavigate } from 'react-router-dom';
 
 const SearchPage = () => {
   const [form] = Form.useForm();
-  const [results, setResults] = useState([]);
+  type Note = {
+    user_id: number;
+    note_id: number;
+    note_name: string;
+    tags: string[];
+    content: string;
+    avatar: string;
+    like_count: number;
+    mark_count: number;
+    comment_count: number;
+    create_time: string;
+  };
+  const [results, setResults] = useState<Note[]>([]);
   const [loading, setLoading] = useState(false);
   const [isGridLayout, setIsGridLayout] = useState(true);
   const [pagination, setPagination] = useState({ current: 1, pageSize: 12, total: 0 });
@@ -98,8 +111,8 @@ const SearchPage = () => {
                   }
                 />
                 <div style={{ marginTop: 8 }}>
-                  {item.tags?.map((tag) => (
-                    <Tag key={tag} color="blue">{tag}</Tag>
+                  {item.tags?.map((tag: string) => (
+                    <Tag key='tags' color="blue">{tag}</Tag>
                   ))}
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', marginTop: 8 }}>
@@ -142,8 +155,8 @@ const SearchPage = () => {
                       {item.content?.replace(/(> |)/g, ' ') ?? '无内容'}
                     </div>
                     <div style={{ marginTop: 8 }}>
-                      {item.tags?.map(tag => (
-                        <Tag key={tag} color="blue">{tag}</Tag>
+                      {item.tags?.map((tag: string) => (
+                        <Tag key='tags' color="blue">{tag}</Tag>
                       ))}
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', marginTop: 8 }}>

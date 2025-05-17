@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, message } from 'antd';
 import { login, register, sendcode } from '@/api/userApi';
 import { useNavigate } from 'react-router-dom';
 import { useUserStore } from '@/stores/userStore';
@@ -46,8 +46,17 @@ const Login = () => {
         navigate('/');
       } else {
         const isPasswordMatch = values.password === values.confirmPassword;
+        console.log('密码匹配', isPasswordMatch);
+        console.log('注册', values);
         if (isPasswordMatch) {
-          await register(values.user_name, values.code, values.email, values.password);
+          const { code } = await register(values.user_name, values.email, values.code, values.password);
+          console.log('注册', code);
+          if (code !== 0) {
+            message.error('注册失败');
+          } else {
+            message.success('注册成功');
+            setFormType('login');
+          }
         }
       }
     } catch (error) {

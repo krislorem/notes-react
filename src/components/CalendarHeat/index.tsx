@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Tooltip as ReactTooltip } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
 import { ActivityCalendar } from 'react-activity-calendar'
@@ -12,12 +13,12 @@ const CalendarHeatMap: React.FC<{ user_id: number }> = ({ user_id }) => {
       try {
         const { data } = await getUserHeat(user_id)
         const sortedData = data.heat_data
-          .map(item => ({
+          .map((item: { date: any; count: any; level: any }) => ({
             date: item.date,
             count: Number(item.count),
             level: Number(item.level)
           }))
-          .sort((a, b) => a.date.localeCompare(b.date));
+          .sort((a: { date: string }, b: { date: any }) => a.date.localeCompare(b.date));
 
         // 补充年份首尾日期
         const firstYear = sortedData[0]?.date.substring(0, 4);
@@ -27,14 +28,18 @@ const CalendarHeatMap: React.FC<{ user_id: number }> = ({ user_id }) => {
           const yearStart = `${firstYear}-01-01`;
           const yearEnd = `${firstYear}-12-31`;
 
-          if (!sortedData.some(d => d.date === yearStart)) {
+          if (!sortedData.some((d: { date: string }) => d.date === yearStart)) {
             newData.unshift({ date: yearStart, count: 0, level: 0 });
           }
-          if (!sortedData.some(d => d.date === yearEnd)) {
+          if (!sortedData.some((d: { date: string }) => d.date === yearEnd)) {
             newData.push({ date: yearEnd, count: 0, level: 0 });
           }
         }
-
+        if (newData.length === 0) {
+          setHeat([{ date: '2025-01-01', count: 0, level: 0 }, { date: '2025-12-31', count: 0, level: 0 }]);
+          setLoading(false)
+          return;
+        }
         setHeat(newData.sort((a, b) => a.date.localeCompare(b.date)));
         console.log('用户数据加载成功:', data);
         setLoading(false)

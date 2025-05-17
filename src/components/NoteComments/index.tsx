@@ -7,8 +7,8 @@ import { useUserStore } from '@/stores/userStore';
 import { LikeOutlined, LikeFilled } from '@ant-design/icons';
 import { Modal, List, Avatar, Skeleton, Pagination, message } from 'antd';
 import './index.css'
-const NoteComments = ({ book_id, visible, onClose }: {
-  book_id: number;
+const NoteComments = ({ note_id, visible, onClose }: {
+  note_id: number;
   visible: boolean;
   onClose: () => void;
 }) => {
@@ -22,7 +22,8 @@ const NoteComments = ({ book_id, visible, onClose }: {
   const loadComments = async () => {
     try {
       setLoading(true);
-      const { data } = await getNoteComments(book_id, user.user_id, currentPage, pageSize);
+      const { data } = await getNoteComments(note_id, user.user_id, currentPage, pageSize);
+      console.log(data.data)
       setComments(data.data || []);
       setTotal(data.total || 0);
     } finally {
@@ -38,7 +39,8 @@ const NoteComments = ({ book_id, visible, onClose }: {
 
   const handleSubmit = async (content: string) => {
     if (!user) return;
-    await createNoteComment(content, user.user_id, book_id);
+    console.log({ content, user_id: user.user_id, note_id })
+    await createNoteComment(content, user.user_id, note_id);
     await loadComments();
   };
   const handleLikeComment = async (comment_id: number, is_liked: number) => {

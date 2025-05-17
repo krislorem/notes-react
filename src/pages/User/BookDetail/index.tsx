@@ -6,6 +6,9 @@ import { getMyBookNotes, deleteNote, getIsLikedBook, likeBook, unlikeBook, getIs
 import BookComments from '@/components/BookComments';
 import { useUserStore } from '@/stores/userStore';
 type NoteType = {
+  user_id: number;
+  user_name: string;
+  avatar: string;
   note_id: number;
   note_name: string;
   content: string;

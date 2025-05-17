@@ -11,10 +11,10 @@ const login = async (user_name: string, password: string) => {
 // 注册
 const register = async (user_name: string, email: string, code: string, password: string) => {
   const response = await baseAxios.post("/api/user/register", {
-    user_name,
-    email,
-    code,
-    password,
+    user_name: user_name,
+    email: email,
+    code: code,
+    password: password,
   });
   return response.data;
 };

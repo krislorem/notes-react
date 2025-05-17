@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { getAllPublicBooks, getAllPublicNotes } from "@/api/bookApi"
 import { useEffect, useState } from "react"
 import { Tag, Button, Card, Col, Row, Switch, Pagination, List } from "antd"
@@ -8,7 +10,7 @@ const ExploreLayout = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isGridLayout, setIsGridLayout] = useState(true);
   const [data, setData] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [_loading, setLoading] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
   const navigate = useNavigate();
 

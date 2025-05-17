@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import NoteEditor from '@/components/NoteEditor';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -15,7 +16,7 @@ const UserNoteEdit = () => {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const editorRef = useRef<any>(null);
-  const [importing, setImporting] = useState(false);
+  const [_importing, setImporting] = useState(false);
 
   useEffect(() => {
     if (!bookId || !/^\d+$/.test(bookId)) {

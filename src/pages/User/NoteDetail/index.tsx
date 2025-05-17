@@ -105,7 +105,7 @@ const UserNoteDetail = () => {
       <NoteComments
         visible={commentsVisible}
         onClose={() => setCommentsVisible(false)}
-        book_id={Number(noteId)}
+        note_id={Number(noteId)}
       />
       <h1 style={{ fontSize: '24px', marginBottom: 16 }}>{data.note_name}</h1>
       <div style={{ marginBottom: 20 }}>{data.tags.map((tag, _index) => (
